@@ -22,18 +22,26 @@ export LIB=/home/samuel/programme/watcom/lib286/dos:$LIB
 // OpenWatcom graphics library
 #include <graph.h>
 
+#include "gui/window.h"
+
 int main() {
-	_setvideomode(_VRES16COLOR);
-	_rectangle(_GFILLINTERIOR, 100, 100, 540, 380);
+	_setvideomode(_VRES256COLOR); // SVGA (640x480, 256 colors)
 
-	cin.ignore();
+	char t[] = "hallo welt";
 
-	_setviewport(200,200,440,280);
-	_clearscreen(_GVIEWPORT);
+	Window foo(100, 100, 400, 200);
+	Window bar(110, 110, 300, 300);
+
+	_setcolor(200);
+	_rectangle(_GFILLINTERIOR, 0, 0, 640, 480);
+
+	_outtext(t);
+
+	foo.draw();
+	bar.draw();
 
 	cin.ignore();
 
 	_setvideomode(_DEFAULTMODE);
-
 	return EXIT_SUCCESS;
 }
