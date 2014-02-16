@@ -1,0 +1,1 @@
+/home/samuel/programme/watcom/owsetenv.sh

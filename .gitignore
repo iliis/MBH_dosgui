@@ -13,6 +13,12 @@
 *.dylib
 
 # Executables
-*.exe
+# *.exe # keep resulting binary in repo, as this is a cross-compiled DOS-EXE
 *.out
 *.app
+
+# Temporary files
+*.swp
+
+# Environment
+oswsetenv.sh
