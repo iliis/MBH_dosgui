@@ -1,11 +1,13 @@
 #include "errorclass.h"
 
-
+// ignore warnings about unused parameters
+#ifdef __WATCOMC__
+#pragma warning 726 10
+#endif
 
 //------------------------------------------------------------------------------------------------
 const std::string Error::getMessage(const std::string type, const std::string message, const std::string file, const int line, const int err)
 {
-	type; file; line; err;
 	return std::string(message); // TODO
 	/*const std::string text = message + "\n  (in file '" + file + "' at line " + ToString(line)+")";
 

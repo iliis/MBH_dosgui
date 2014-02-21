@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <string>
+#include <assert.h>
 
 
 #include "tools/errorclass.h"
@@ -44,6 +45,14 @@
  *   Actually stores the calculations done when Expression.get() is called.
  * 
  */ 
+
+
+
+// ignore warnings about unused parameters
+#ifdef __WATCOMC__
+#pragma warning 726 10
+#endif
+
 
 
 #define CHECK_FOR_CYCLES /// still possible! (a -> b -> a)
@@ -230,7 +239,14 @@ public:
 	{
 	public:
 		ExprMaxRef(ExpressionRef* A, ExpressionRef* B) : ExprTwinRef(A,B) {};
-		Typ get(){return max(this->a->get(), this->b->get());};
+		Typ get()
+		{
+			Typ a = this->a->get(), b = this->b->get();
+			if (a > b)
+				return a;
+			else
+				return b;
+		}
 
 		virtual ExpressionRef* copy() const {return new ExprMaxRef(this->a->copy(),this->b->copy());};
 	};
@@ -240,12 +256,21 @@ public:
 	{
 	public:
 		ExprMinRef(ExpressionRef* A, ExpressionRef* B) : ExprTwinRef(A,B) {};
-		Typ get(){return min(this->a->get(), this->b->get());};
+		Typ get() //{return min(this->a->get(), this->b->get());};
+		{
+			Typ a = this->a->get(), b = this->b->get();
+			if (a < b)
+				return a;
+			else
+				return b;
+		}
 
 		virtual ExpressionRef* copy() const {return new ExprMinRef(this->a->copy(),this->b->copy());};
 	};
 
+	// TODO
 	/// f(x) FUNCTION
+	/*
 	class ExprFuncRef : public ExprSingleRef
 	{
 		boost::function<Typ(Typ)> func;
@@ -255,6 +280,7 @@ public:
 
 		virtual ExpressionRef* copy() const {return new ExprFuncRef(this->func, this->ref->copy());};
 	};
+	*/
 
 private:
 ///   PROPERTIES
@@ -262,7 +288,7 @@ private:
 
 	Typ val; // the actual value of this Expression, may be the result of a complex calculation stored in @expr
 	ExpressionRef* expr; // how to calculate the value of this instance based on other Expressions (NOT the children, this is 'backwards')
-	list<Expression*> children; // Expressions which depend on this value -> forward (on_change traverses this)
+	std::list<Expression*> children; // Expressions which depend on this value -> forward (on_change traverses this)
 
 	typedef Typ T;
 
@@ -293,18 +319,21 @@ public:
 	void on_change()
 	{
 		// BOOST_FOREACH(Expression* c, this->children)
-		for(list<Expression*> c_iter = this->children.begin(); c_iter != this->children.end(); ++c_iter)
-			(*c)->update();
+		for(std::list<Expression*>::iterator c_iter = this->children.begin(); c_iter != this->children.end(); ++c_iter)
+			(*c_iter)->update();
 	}
 
 	void on_deletion()
 	{
-		list<Expression*> tmp_children;
+		std::list<Expression*> tmp_children;
 		tmp_children.swap(this->children);
 
 		//BOOST_FOREACH(Expression* c, tmp_children)
-		for(list<Expression*> c_iter = this->tmp_children.begin(); c_iter != this->tmp_children.end(); ++c_iter)
-			c->unlink();
+		for(std::list<Expression*>::iterator c_iter = tmp_children.begin();
+			c_iter != tmp_children.end();
+		  	++c_iter) {
+			(*c_iter)->unlink();
+		}
 	}
 
 	inline
@@ -426,7 +455,8 @@ public:
 	ExpressionRef* neg  ()                         {           return new ExprNegRef  (this->ref());};
 	ExpressionRef* times(ExpressionRef* r)         {assert(r); return new ExprMultRef (this->ref(), r);};
 	ExpressionRef* divided_by(ExpressionRef* r)    {assert(r); return new ExprDivRef  (this->ref(), r);};
-	ExpressionRef* func (boost::function<Typ(Typ)> f){         return new ExprFuncRef (f, this->ref());};
+	// TODO
+	//ExpressionRef* func (boost::function<Typ(Typ)> f){         return new ExprFuncRef (f, this->ref());};
 
 
 	Expression<Typ>& operator+=(ExpressionRefPtr r)
@@ -468,7 +498,7 @@ typename Expression<T>::ExpressionRefPtr CONST(Expression<T> val)
 	{return new typename Expression<T>::ExprConstRef(val.get());};
 
 template <typename T>
-typename Expression<T>::ExpressionRefPtr EXPR(string name,
+typename Expression<T>::ExpressionRefPtr EXPR(std::string name,
 													typename Expression<T>::ExpressionRef* a,
 													typename Expression<T>::ExpressionRef* b = NULL)
 {
@@ -492,7 +522,9 @@ typename Expression<T>::ExpressionRefPtr EXPR(string name,
 	else if(name == "neg" || name == "negate")
 		return new typename E::ExprNegRef(a);
 	else
-		throw ERROR("parse", "Unknown expression token '"+name+"'.");
+		// TODO
+		throw ERROR("parse", "Unknown expression token.");
+		//throw ERROR("parse", "Unknown expression token '"+name+"'.");
 };
 
 
@@ -506,13 +538,13 @@ typename Expression<T>::ExpressionRefPtr MAX(typename Expression<T>::ExpressionR
 }
 
 template <typename T>
-typename Expression<T>::ExpressionRefPtr EXPR(string name,
+typename Expression<T>::ExpressionRefPtr EXPR(std::string name,
 													typename Expression<T>::ExpressionRef* a,
 													T b)
 {return EXPR<T>(name,a,CONST<T>(b));}
 
 template <typename T>
-typename Expression<T>::ExpressionRefPtr EXPR(string name,
+typename Expression<T>::ExpressionRefPtr EXPR(std::string name,
 													T a,
 													typename Expression<T>::ExpressionRef* b)
 {return EXPR<T>(name,CONST<T>(a),b);}
@@ -524,7 +556,7 @@ typename Expression<T>::ExpressionRefPtr FUNC(boost::function<T(T)> func,
 {
 	assert(a);
 	return new typename Expression<T>::ExprFuncRef(func, a);
-};*/
+};
 
 template <typename T>
 typename Expression<T>::ExpressionRefPtr IF_ELSE(	typename Expression<T>::ExpressionRef* a,
@@ -534,5 +566,6 @@ typename Expression<T>::ExpressionRefPtr IF_ELSE(	typename Expression<T>::Expres
 	assert(a); assert(b);
 	return new typename Expression<T>::ExprIfElseRef(a,b, func);
 };
+*/
 
 #endif // ATTRIBUTE_HPP_INCLUDED

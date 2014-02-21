@@ -1,6 +1,6 @@
 
 CC=wpp
-CFLAGS=-wx -ml -q -i=.
+CFLAGS=-wx -ml -q -i=. -xs
 LDFLAGS=-l=dos -wx -ml -q
 HEADERS=gui/window.h gui/widget.h heater/temperature_sensor.h heater/temperature_controller.h heater/printer.h tools/errorclass.h
 SOURCES=$(HEADERS:.h=.cpp) main.cpp
@@ -20,7 +20,6 @@ main:	$(OBJECTS)
 	wcl $(LDFLAGS) $(OBJECTS) -fe=main.exe
 
 %.o: %.cpp $(HEADERS)
-	@echo "foobar"
 	$(CC) $(CFLAGS) $< -fo=$@
 
 test:	test.c

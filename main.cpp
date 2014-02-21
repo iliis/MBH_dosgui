@@ -26,7 +26,6 @@ export LIB=/home/samuel/programme/watcom/lib286/dos:$LIB
 #include "tools/expression_noboost.h"
 
 int main() {
-	_setvideomode(_VRES256COLOR); // SVGA (640x480, 256 colors)
 
 	char t[] = "hallo welt";
 
@@ -37,6 +36,10 @@ int main() {
 	cout << eint1 << endl;
 	eint2 = 2222;
 	cout << eint1 << endl;
+
+	cin.ignore();
+
+	_setvideomode(_VRES256COLOR); // SVGA (640x480, 256 colors)
 
 	Window foo(100, 100, 400, 200);
 	Window bar(110, 110, 300, 300);
