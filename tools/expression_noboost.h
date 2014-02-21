@@ -4,17 +4,8 @@
 #include <algorithm>
 #include <string>
 
-#include <boost/signals.hpp>
-#include <boost/bind.hpp>
-#include <boost/foreach.hpp>
 
-#include "tools/errorclass.hpp"
-
-
-#ifdef USE_PROPERTY_TREE
-#include <boost/property_tree/ptree.hpp>
-using boost::property_tree::ptree;
-#endif
+#include "tools/errorclass.h"
 
 /*
  * Expression<T>:
@@ -215,8 +206,9 @@ public:
 		virtual ExpressionRef* copy() const {return new ExprDivRef(this->a->copy(),this->b->copy());};
 	};
 
+	// TODO
 	/// If/else
-	class ExprIfElseRef : public ExprTwinRef
+	/*class ExprIfElseRef : public ExprTwinRef
 	{
 		boost::function<bool(Typ,Typ)> statement;
 	public:
@@ -231,7 +223,7 @@ public:
 		};
 
 		virtual ExpressionRef* copy() const {return new ExprIfElseRef(this->a->copy(),this->b->copy(), statement);};
-	};
+	};*/
 
 	/// Max
 	class ExprMaxRef : public ExprTwinRef
@@ -300,8 +292,9 @@ public:
 
 	void on_change()
 	{
-		BOOST_FOREACH(Expression* c, this->children)
-			c->update();
+		// BOOST_FOREACH(Expression* c, this->children)
+		for(list<Expression*> c_iter = this->children.begin(); c_iter != this->children.end(); ++c_iter)
+			(*c)->update();
 	}
 
 	void on_deletion()
@@ -309,7 +302,8 @@ public:
 		list<Expression*> tmp_children;
 		tmp_children.swap(this->children);
 
-		BOOST_FOREACH(Expression* c, tmp_children)
+		//BOOST_FOREACH(Expression* c, tmp_children)
+		for(list<Expression*> c_iter = this->tmp_children.begin(); c_iter != this->tmp_children.end(); ++c_iter)
 			c->unlink();
 	}
 
@@ -523,13 +517,14 @@ typename Expression<T>::ExpressionRefPtr EXPR(string name,
 													typename Expression<T>::ExpressionRef* b)
 {return EXPR<T>(name,CONST<T>(a),b);}
 
-template <typename T>
+// TODO:
+/*template <typename T>
 typename Expression<T>::ExpressionRefPtr FUNC(boost::function<T(T)> func,
 											  typename Expression<T>::ExpressionRef* a)
 {
 	assert(a);
 	return new typename Expression<T>::ExprFuncRef(func, a);
-};
+};*/
 
 template <typename T>
 typename Expression<T>::ExpressionRefPtr IF_ELSE(	typename Expression<T>::ExpressionRef* a,

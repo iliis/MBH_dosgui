@@ -1,18 +1,26 @@
+
 CC=wpp
-CFLAGS=-wx -ml -q
+CFLAGS=-wx -ml -q -i=.
 LDFLAGS=-l=dos -wx -ml -q
-HEADERS=gui/window.h gui/widget.h heater/temperature_sensor.h heater/temperature_controller.h heater/printer.h
+HEADERS=gui/window.h gui/widget.h heater/temperature_sensor.h heater/temperature_controller.h heater/printer.h tools/errorclass.h
 SOURCES=$(HEADERS:.h=.cpp) main.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 
+# check if specified files exist (e.g. warn on typo)
+# not sure if this actually works
+ifeq (,$(wildcard $(HEADERS)))
+	$(error some file does not exist!)
+endif
+
 .PHONY: clean cleantest
 
-all:	main.exe
+all:	main
 
-main.exe:	$(OBJECTS)
+main:	$(OBJECTS)
 	wcl $(LDFLAGS) $(OBJECTS) -fe=main.exe
 
 %.o: %.cpp $(HEADERS)
+	@echo "foobar"
 	$(CC) $(CFLAGS) $< -fo=$@
 
 test:	test.c
