@@ -8,8 +8,7 @@
 //------------------------------------------------------------------------------------------------
 const std::string Error::getMessage(const std::string type, const std::string message, const std::string file, const int line, const int err)
 {
-	return std::string(message); // TODO
-	/*const std::string text = message + "\n  (in file '" + file + "' at line " + ToString(line)+")";
+	const std::string text = message + "\n  (in file '" + file + "' at line " + ToString(line)+")";
 
 	if(type == "init")
 	{
@@ -62,6 +61,6 @@ const std::string Error::getMessage(const std::string type, const std::string me
 	else
 	{
 		return "UNSPECIFIC ERROR\n(This usually means, that something went TOTALLY WRONG, it's just something unimportant, or i was just too lazy to write an handle for this type of error.)\n\n"+text;
-	}*/
+	}
 }
 //------------------------------------------------------------------------------------------------

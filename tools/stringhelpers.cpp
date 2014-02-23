@@ -1,0 +1,264 @@
+#include "stringhelpers.h"
+
+///////////////////////////////////////////////////////////////////////////////
+string ToString(int x)
+{
+	char buf[20];
+	itoa(x, buf, 10); // base 10
+	return string(buf);
+}
+///////////////////////////////////////////////////////////////////////////////
+string ToString(unsigned int x)
+{
+	char buf[20];
+	utoa(x, buf, 10); // base 10
+	return string(buf);
+}
+///////////////////////////////////////////////////////////////////////////////
+string ToString(long int x)
+{
+	char buf[20];
+	ltoa(x, buf, 10); // base 10
+	return string(buf);
+}
+///////////////////////////////////////////////////////////////////////////////
+string ToString(unsigned long int x)
+{
+	char buf[20];
+	ultoa(x, buf, 10); // base 10
+	return string(buf);
+}
+///////////////////////////////////////////////////////////////////////////////
+string ToString(long long int x)
+{
+	char buf[20];
+	lltoa(x, buf, 10); // base 10
+	return string(buf);
+}
+///////////////////////////////////////////////////////////////////////////////
+string ToString(unsigned long long int x)
+{
+	char buf[20];
+	ulltoa(x, buf, 10); // base 10
+	return string(buf);
+}
+///////////////////////////////////////////////////////////////////////////////
+string ToString(double x)
+{
+	char buf[80];
+	gcvt(x, 8, buf); // to 8 digits
+	return string(buf);
+}
+///////////////////////////////////////////////////////////////////////////////
+int toAscii(char const& c)
+{
+	return int(c);
+};
+//------------------------------------------------------------------------------------------------
+bool
+isQuote(const char& c)
+{
+	return c == '\'' || c == '"' || c == '`';
+}
+//------------------------------------------------------------------------------------------------
+int strCount(string haystack, const char needle)
+{
+	int nr=0;
+
+	//BOOST_FOREACH(char c, haystack)
+	for (string::iterator it = haystack.begin(); it != haystack.end(); ++it)
+		if(*it == needle) ++nr;
+
+	return nr;
+};
+//------------------------------------------------------------------------------------------------
+int strCount(string haystack, string needle)
+{
+	int nr = 0;
+	size_t loc  = haystack.find(needle);
+	while(loc != string::npos)
+	{
+		loc = haystack.find(needle, loc+1);
+		nr++;
+	}
+
+	return nr;
+};
+//------------------------------------------------------------------------------------------------
+void printStatusBar(string text, float percent)
+{
+	for(unsigned int i = 0; i < 13+text.length(); ++i)
+	{
+		printf("\b");
+	}
+
+	printf("%s [", text.c_str());
+	for(int i = 0; i < 10; ++i)
+	{
+		if(i < percent*10)
+		{
+			printf("#");
+		}
+		else
+		{
+			printf(" ");
+		}
+	}
+	printf("]");
+}
+//------------------------------------------------------------------------------------------------
+string
+getLeftSubstring(string text, string delimiter)
+{
+	unsigned int pos = text.find(delimiter);
+	if (pos == string::npos)
+		return text;
+
+	return text.substr(0, pos);
+};
+
+string
+getRightSubstring(string text, string delimiter)
+{
+	unsigned int pos = text.find(delimiter);
+	if (pos == string::npos)
+		return text;
+
+	return text.substr(pos+1);
+};
+//------------------------------------------------------------------------------------------------
+list<string> splitString(string text, string delimiter)
+{
+	list<string> results;
+
+	size_t delpos = text.find(delimiter);
+	size_t oldpos = -1;
+	do
+	{
+		results.push_back(text.substr(oldpos+1, delpos-oldpos-1));
+		oldpos = delpos;
+		delpos = text.find(delimiter, delpos+1);
+	}
+	while(oldpos != string::npos);
+
+	return results;
+};
+//------------------------------------------------------------------------------
+list<string> splitStringWithChars(string text, string delimiters, bool trim)
+{
+	list<string> results;
+
+	size_t delpos = text.find_first_of(delimiters);
+	size_t oldpos = -1;
+	do
+	{
+		string tmp(text.substr(oldpos+1, delpos-oldpos-1));
+		if(trim) tmp = trimString(tmp);
+		if(!tmp.empty()) results.push_back(tmp);
+
+		oldpos = delpos;
+		delpos = text.find_first_of(delimiters, delpos+1);
+	}
+	while(oldpos != string::npos);
+
+	return results;
+};
+//------------------------------------------------------------------------------------------------
+list<string>
+splitStringWithCharsAndQuotes(string text, string delimiters, bool trim)
+{
+	list<string> results;
+	
+	char current_quote = ' '; // none
+	size_t from = 0; size_t pos = 0;
+	
+	for(std::string::iterator i = text.begin(); i != text.end(); ++i)
+	{
+		++pos;
+		const bool is_last      =  i == text.end()-1;
+		const bool is_delimiter =  delimiters.find(*i) != std::string::npos;
+				
+		if(isQuote(*i))
+		{
+			if(current_quote == ' ')
+			{
+				// not inside a quote -> entering one now
+				current_quote = *i;
+			}
+			else
+			{
+				// inside a quote -> maybe end current one
+				if(current_quote == *i)
+					current_quote = ' ';
+			}
+		}
+		else if(is_last or is_delimiter)
+		{
+			string tmp = text.substr(from, pos-from-(is_delimiter?1:0)); // extract chunk and remove delimiter if neccessary
+			from = pos;
+			
+			if(trim) tmp = trimString(tmp);
+			if(!tmp.empty()) results.push_back(tmp);
+		}
+	}
+
+	return results;
+}
+//------------------------------------------------------------------------------------------------
+string fillStringLeft(string text, unsigned int lenght, char fill)
+{
+    while(text.length() < lenght)
+    {
+        text = fill+text;
+    }
+    return text;
+};
+
+string fillStringRight(string text, unsigned int lenght, char fill)
+{
+    while(text.length() < lenght)
+    {
+        text = text+fill;
+    }
+    return text;
+};
+//------------------------------------------------------------------------------------------------
+string trimString(string text, string what)
+{
+	size_t startpos = text.find_first_not_of(what);
+	size_t endpos	= text.find_last_not_of (what);
+
+	if(startpos == string::npos || text.empty())
+		return "";
+	else
+		return text.substr(startpos, endpos-startpos+1);
+};
+//------------------------------------------------------------------------------------------------
+string strReplace(string haystack, string needle, string text)
+{
+	size_t pos = haystack.find(needle);
+	while(pos != string::npos)
+	{
+		haystack.replace(pos, needle.size(), text);
+		pos = haystack.find(needle, pos);
+	}
+	return haystack;
+};
+//------------------------------------------------------------------------------------------------
+list<string> stringToLines(string text)
+{
+	list<string> lines; ///< Die einzelnen Zeilen des Textes
+
+	size_t i = 0;
+	do
+	{
+		i = text.find_first_of('\n');
+		lines.push_back(text.substr(0, i));
+
+		text = text.substr(i+1);
+	}
+	while( i != string::npos );
+
+	return lines;
+}
+//------------------------------------------------------------------------------------------------

@@ -6,6 +6,8 @@
 #include <errno.h>
 #include <stdio.h>
 
+#include "stringhelpers.h"
+
 
 //------------------------------------------------------------------------------
 // Makro für detailiertere Fehlermeldungen

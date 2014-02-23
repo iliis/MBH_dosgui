@@ -8,12 +8,17 @@
 #include "widget.h"
 
 class Window : public Widget {
+
+protected:
+	Window* parent;
+	std::list<Widget*> children;
+
+	// actual content of a window goes in here
+	virtual void _draw() {};
+public:
 	Expression<float> rel_x, rel_y;
 	Expression<float> width, height;
 
-	Window* parent;
-	std::list<Widget*> children;
-public:
 	Window()
 	   : parent(NULL) {};
 	Window(float x, float y)
@@ -25,6 +30,9 @@ public:
 	float getAbsY() { if (parent) return parent->getAbsY() + rel_y; else return rel_y; }
 
 	void draw();
+
+	void setParent(Window* p);
+	void centerInsideParent();
 };
 
 #endif

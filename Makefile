@@ -2,7 +2,7 @@
 CC=wpp
 CFLAGS=-wx -ml -q -i=. -xs
 LDFLAGS=-l=dos -wx -ml -q
-HEADERS=gui/window.h gui/widget.h gui/gui_manager.h heater/temperature_sensor.h heater/temperature_controller.h heater/printer.h tools/errorclass.h
+HEADERS=gui/window.h gui/message_box.h gui/widget.h gui/gui_manager.h gui/keyboard.h heater/temperature_sensor.h heater/temperature_controller.h heater/printer.h tools/errorclass.h tools/stringhelpers.h
 SOURCES=$(HEADERS:.h=.cpp) main.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 

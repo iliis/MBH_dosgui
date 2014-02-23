@@ -53,7 +53,6 @@ int main() {
 	GuiManager gui;
 	gui.init();
 	gui.run();
-	cin.ignore();
 	return EXIT_SUCCESS;
 }
 ///////////////////////////////////////////////////////////////////////////////
