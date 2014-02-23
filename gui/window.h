@@ -4,17 +4,18 @@
 #include <graph.h>
 #include <list>
 
+#include "tools/expression_noboost.h"
 #include "widget.h"
 
 class Window : public Widget {
-	float rel_x, rel_y;
-	float width, height;
+	Expression<float> rel_x, rel_y;
+	Expression<float> width, height;
 
 	Window* parent;
 	std::list<Widget*> children;
 public:
 	Window()
-	   : rel_x(0), rel_y(0), width(0), height(0), parent(NULL) {};
+	   : parent(NULL) {};
 	Window(float x, float y)
 	   : rel_x(x), rel_y(y), parent(NULL) {};
 	Window(float x, float y, float w, float h)

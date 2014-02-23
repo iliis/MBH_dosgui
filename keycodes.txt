@@ -1,0 +1,22 @@
+getch() from conio.h
+====================
+
+returns ASCII for normal keys
+
+ESC		27
+ENTER	13
+
+special keys (like cursors or function keys) return 0, actual code on second call to getch()
+
+		normal	shift
+up:		072
+down:	080
+left:	075
+right:	077
+
+F1:		059		084
+F2:		060		085
+...
+F10		068		093
+F11		0133	0135
+F12		0134	0136

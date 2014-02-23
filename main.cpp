@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <iostream.h>
+#include <conio.h>
+#include <stdarg.h>
 
 // notes on compiling pcurses with watcom on linux
 // owsetenv.sh:
@@ -22,38 +24,36 @@ export LIB=/home/samuel/programme/watcom/lib286/dos:$LIB
 // OpenWatcom graphics library
 #include <graph.h>
 
-#include "gui/window.h"
-#include "tools/expression_noboost.h"
+#include "gui/gui_manager.h"
 
+///////////////////////////////////////////////////////////////////////////////
+void gprintf(char * format, ...) {
+	char buf[200];
+	va_list args;
+
+	va_start(args, format);
+	vsnprintf(buf, sizeof(buf), format, args);
+	va_end(args);
+
+	_outgtext(buf);
+}
+///////////////////////////////////////////////////////////////////////////////
+void draw_color_table() {
+	_clearscreen(_GCLEARSCREEN);
+
+	for (unsigned int c = 0; c < 256; ++c) {
+		_setcolor(c);
+		int x = (c % 16) * 10;
+		int y = (c >> 4) * 10;
+		_rectangle(_GFILLINTERIOR, x, y, x+10, y+10);
+	}
+}
+///////////////////////////////////////////////////////////////////////////////
 int main() {
-
-	char t[] = "hallo welt";
-
-	Expression<int> eint1 = 123, eint2 = 1111, eint3 = 2432;
-
-	eint1 = eint2.ref() + eint3.ref();
-
-	cout << eint1 << endl;
-	eint2 = 2222;
-	cout << eint1 << endl;
-
+	GuiManager gui;
+	gui.init();
+	gui.run();
 	cin.ignore();
-
-	_setvideomode(_VRES256COLOR); // SVGA (640x480, 256 colors)
-
-	Window foo(100, 100, 400, 200);
-	Window bar(110, 110, 300, 300);
-
-	_setcolor(200);
-	_rectangle(_GFILLINTERIOR, 0, 0, 640, 480);
-
-	_outtext(t);
-
-	foo.draw();
-	bar.draw();
-
-	cin.ignore();
-
-	_setvideomode(_DEFAULTMODE);
 	return EXIT_SUCCESS;
 }
+///////////////////////////////////////////////////////////////////////////////

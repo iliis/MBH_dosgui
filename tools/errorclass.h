@@ -18,8 +18,8 @@
 class Error : public std::runtime_error
 {
 public:
-	                       Error(const std::string type, const std::string message, const std::string file = "", const int line = 0, const int custom_errno = 0)
-	                   : std::runtime_error(getMessage(type, message, file, line, custom_errno == 0?errno:custom_errno)) {};
+	Error(const std::string type, const std::string message, const std::string file = "", const int line = 0, const int custom_errno = 0)
+		: std::runtime_error(getMessage(type, message, file, line, custom_errno == 0?errno:custom_errno)) {};
 
 	const std::string getMessage(const std::string type, const std::string message, const std::string file = "", const int line = 0, const int err = 0);
 };
