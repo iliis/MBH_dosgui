@@ -2,33 +2,68 @@
 #define __KEYBOARD_H_INCLUDED__
 
 #include <conio.h>
+#include <string>
 
-typedef int keycode;
+class Key {
+public:
+	std::string name;
+	int keycode;
+	bool shift;
+
+	Key(std::string name, int keycode)
+		: name(name), keycode(keycode), shift(false) {};
+
+	Key(std::string name, int keycode, bool shift)
+		: name(name), keycode(keycode), shift(shift) {};
+
+	// copy/assignment as we can't initalize a const array of Keys otherwise
+
+	Key(const Key& k)
+		: name(k.name), keycode(k.keycode), shift(k.shift) {};
+
+	Key& operator=(const Key& k) 
+	{
+		if (&k != this)
+		{
+			this->name    = k.name;
+			this->keycode = k.keycode;
+			this->shift   = k.shift;
+		}
+
+		return *this;
+	}
+
+	bool operator==(const Key& k)
+	{
+		return this->keycode == k.keycode;
+	}
+};
 
 class Keyboard {
 public:
-	static const keycode KEY_ENTER	=  13;
-	static const keycode KEY_ESCAPE	=  27;
-	static const keycode KEY_F1		= 300;
-	static const keycode KEY_F2		= 301;
-	static const keycode KEY_F3		= 302;
-	static const keycode KEY_F4		= 303;
-	static const keycode KEY_F5		= 304;
-	static const keycode KEY_F6		= 305;
-	static const keycode KEY_F7		= 306;
-	static const keycode KEY_F8		= 307;
-	static const keycode KEY_F9		= 308;
-	static const keycode KEY_F10	= 309;
-	static const keycode KEY_F11	= 310;
-	static const keycode KEY_F12	= 311;
-	static const keycode KEY_UP		= 312;
-	static const keycode KEY_DOWN	= 313;
-	static const keycode KEY_LEFT	= 314;
-	static const keycode KEY_RIGHT	= 315;
+	static const Key KEY_ENTER ;
+	static const Key KEY_ESCAPE;
+	static const Key KEY_F1    ;
+	static const Key KEY_F2    ;
+	static const Key KEY_F3    ;
+	static const Key KEY_F4    ;
+	static const Key KEY_F5    ;
+	static const Key KEY_F6    ;
+	static const Key KEY_F7    ;
+	static const Key KEY_F8    ;
+	static const Key KEY_F9    ;
+	static const Key KEY_F10   ;
+	static const Key KEY_F11   ;
+	static const Key KEY_F12   ;
+	static const Key KEY_UP    ;
+	static const Key KEY_DOWN  ;
+	static const Key KEY_LEFT  ;
+	static const Key KEY_RIGHT ;
 
 	// TODO: SHIFT-F keys
 
-	static keycode get_keycode();
+	static const Key get_key();
 };
+
 
 #endif

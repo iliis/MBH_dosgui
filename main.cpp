@@ -25,9 +25,12 @@ export LIB=/home/samuel/programme/watcom/lib286/dos:$LIB
 #include <graph.h>
 
 #include "gui/gui_manager.h"
+#include "gui/menu.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-void gprintf(char * format, ...) {
+FILE* err_logfile = NULL;
+///////////////////////////////////////////////////////////////////////////////
+void debug_printf(const char * format, ...) {
 	char buf[200];
 	va_list args;
 
@@ -35,7 +38,25 @@ void gprintf(char * format, ...) {
 	vsnprintf(buf, sizeof(buf), format, args);
 	va_end(args);
 
-	_outgtext(buf);
+	// print to screen
+	_outtext(buf);
+
+	// print into logfile
+	if (err_logfile) {
+		fprintf(err_logfile, buf);
+	}
+}
+///////////////////////////////////////////////////////////////////////////////
+void open_logfile() {
+	err_logfile = fopen("logfile.err", "w");
+}
+///////////////////////////////////////////////////////////////////////////////
+void close_logfile() {
+	if (err_logfile) {
+		if (fclose(err_logfile) != 0) {
+			debug_printf("ERROR: couldn't close logfile.\n");
+		}
+	}
 }
 ///////////////////////////////////////////////////////////////////////////////
 void draw_color_table() {
@@ -50,9 +71,54 @@ void draw_color_table() {
 }
 ///////////////////////////////////////////////////////////////////////////////
 int main() {
-	GuiManager gui;
-	gui.init();
-	gui.run();
-	return EXIT_SUCCESS;
+	open_logfile();
+
+	try {
+		GuiManager& gui = GuiManager::getInstance();
+		gui.init();
+
+		Menu* m = new Menu();
+		m->addEntry("hallo");
+		m->addEntry("welt");
+		m->addEntry("asdfasdfasdf asdfasdf");
+
+		gui.getScreen().addWidget(m);
+		gui.setFocusTo(m->getEntries().front());
+
+		debug_printf("starting gui\n");
+		gui.run();
+
+		debug_printf("done\n");
+		close_logfile();
+		return EXIT_SUCCESS;
+	} catch (Error &e) {
+		// non-critical error during init -> quit anyway
+		_setvideomode(_DEFAULTMODE);
+		debug_printf("ERROR:\n");
+		debug_printf(e.what());
+		debug_printf("\naborting ...\n");
+	}
+	catch (CriticalError& e) {
+		_setvideomode(_DEFAULTMODE);
+		debug_printf("CRITICAL ERROR:\n");
+		debug_printf(e.what());
+		debug_printf("\naborting ...\n");
+	}
+	catch (std::runtime_error& e) {
+		_setvideomode(_DEFAULTMODE);
+		debug_printf("CRITICAL ERROR:\nUnhandled runtime exception:\n");
+		debug_printf(e.what());
+		debug_printf("\naborting ...\n");
+	}
+	catch (...) {
+		_setvideomode(_DEFAULTMODE);
+		debug_printf("CRITICAL ERROR:\nUnknown exception.\naborting ...\n");
+	}
+
+	debug_printf("press enter to quit\n");
+	getchar();
+
+	close_logfile();
+	return EXIT_FAILURE;
 }
 ///////////////////////////////////////////////////////////////////////////////

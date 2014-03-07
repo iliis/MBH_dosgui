@@ -245,17 +245,18 @@ string strReplace(string haystack, string needle, string text)
 	return haystack;
 };
 //------------------------------------------------------------------------------------------------
-list<string> stringToLines(string text)
+list<string> stringToLines(const string& text)
 {
 	list<string> lines; ///< Die einzelnen Zeilen des Textes
+	string t = text;
 
 	size_t i = 0;
 	do
 	{
 		i = text.find_first_of('\n');
-		lines.push_back(text.substr(0, i));
+		lines.push_back(t.substr(0, i));
 
-		text = text.substr(i+1);
+		t = t.substr(i+1);
 	}
 	while( i != string::npos );
 

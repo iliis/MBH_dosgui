@@ -15,8 +15,8 @@ class GuiManager
 
 	bool is_initialized;
 	bool is_running;
+
 public:
-	GuiManager() : focus(NULL), SCREEN(NULL), is_initialized(false), is_running(false) {};
 	~GuiManager();
 
 	void init();
@@ -29,6 +29,27 @@ public:
 	static void print(float x, float y, std::string t);
 	static int get_text_width(string t);
 	static int get_text_height(string t);
+
+	void keyListener(Key k);
+
+	void addWindow(Window* w);
+	void setFocusTo(Widget* w) { this->focus = w; }
+	const Widget* getFocus() { return this->focus; }
+
+	Window& getScreen() { assert(SCREEN); return *this->SCREEN; }
+
+	///////////////////////////////////////////////////////////////////////////
+	// SINGLETON
+	static GuiManager& getInstance() {
+		static GuiManager instance;
+		return instance;
+	}
+
+private:
+	GuiManager() : focus(NULL), SCREEN(NULL), is_initialized(false), is_running(false) {};
+
+	GuiManager(const GuiManager&); // no copy-constructor
+	void operator=(const GuiManager&); // no assignment
 };
 ///////////////////////////////////////////////////////////////////////////////
 

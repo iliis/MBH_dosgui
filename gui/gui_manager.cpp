@@ -36,7 +36,7 @@ GuiManager::run()
 		while (this->is_running) {
 			try {
 				this->SCREEN->draw();
-				throw ERROR("draw", "just a test");
+				this->keyListener(Keyboard::get_key());
 			}
 			catch (Error& e) {
 				// non-critical error, just show message and continue program
@@ -64,10 +64,36 @@ GuiManager::run()
 				printf("CRITICAL ERROR:\nUnknown exception.\naborting ...\n");
 				this->stop();
 			}
-		}
+		} // end while
 
 		this->is_running = false;
 	}
+}
+///////////////////////////////////////////////////////////////////////////////
+void
+GuiManager::keyListener(Key k)
+{
+	if (focus) {
+		if (focus->keyListener(k))
+			return; // Widget handled input
+	}
+
+	// handle key ourselfs
+	
+	if (k == Keyboard::KEY_LEFT  && focus->focus_next_left)  focus = focus->focus_next_left;
+	if (k == Keyboard::KEY_RIGHT && focus->focus_next_right) focus = focus->focus_next_right;
+	if (k == Keyboard::KEY_UP    && focus->focus_next_up)    focus = focus->focus_next_up;
+	if (k == Keyboard::KEY_DOWN  && focus->focus_next_down)  focus = focus->focus_next_down;
+
+	// if key == ESC: show quit dialog or something
+	if (k == Keyboard::KEY_ESCAPE)
+		this->stop();
+}
+///////////////////////////////////////////////////////////////////////////////
+void
+GuiManager::addWindow(Window* w)
+{
+	SCREEN->addWindow(w);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void
@@ -75,7 +101,7 @@ GuiManager::show_exception(Error& e)
 {
 	MessageBox err_box(SCREEN, string(e.what()) + "\n\nPress any key to continue or press F1 to quit.");
 	err_box.draw();
-	keycode k = Keyboard::get_keycode();
+	Key k = Keyboard::get_key();
 
 	if (k == Keyboard::KEY_F1)
 		this->stop();

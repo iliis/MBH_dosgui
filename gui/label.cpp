@@ -1,0 +1,21 @@
+#include "label.h"
+
+///////////////////////////////////////////////////////////////////////////////
+void
+Label::setText(std::string text)
+{
+	if (text != this->text)
+	{
+		// calculate new size
+		this->width  = GuiManager::get_text_width (text);
+		this->height = GuiManager::get_text_height(text);
+		this->text   = text;
+	}
+}
+///////////////////////////////////////////////////////////////////////////////
+void
+Label::draw()
+{
+	GuiManager::print(this->x, this->y, this->text.c_str());
+}
+///////////////////////////////////////////////////////////////////////////////

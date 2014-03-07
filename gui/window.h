@@ -32,6 +32,8 @@ public:
 	void draw();
 
 	void setParent(Window* p);
+	void addWidget(Widget* w);
+	void addWindow(Window* w);
 	void centerInsideParent();
 };
 

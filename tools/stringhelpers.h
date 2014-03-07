@@ -61,7 +61,7 @@ string strReplace(string haystack, string needle, string text);
 string sillyDigitToString(int foo);
 /////////////////////////////////////////////////////////////////////////////////
 /// zerlegt \a text in einzelne Linien (von "\n" getrennt)
-list<string> stringToLines(string text);
+list<string> stringToLines(const string& text);
 ///////////////////////////////////////////////////////////////////////////////
 
 

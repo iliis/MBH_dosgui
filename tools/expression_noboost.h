@@ -320,7 +320,9 @@ public:
 	{
 		// BOOST_FOREACH(Expression* c, this->children)
 		for(std::list<Expression*>::iterator c_iter = this->children.begin(); c_iter != this->children.end(); ++c_iter)
+		{
 			(*c_iter)->update();
+		}
 	}
 
 	void on_deletion()
@@ -331,7 +333,8 @@ public:
 		//BOOST_FOREACH(Expression* c, tmp_children)
 		for(std::list<Expression*>::iterator c_iter = tmp_children.begin();
 			c_iter != tmp_children.end();
-		  	++c_iter) {
+		  	++c_iter)
+		{
 			(*c_iter)->unlink();
 		}
 	}
