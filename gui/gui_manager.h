@@ -25,6 +25,8 @@ public:
 	inline void stop() { this->is_running = false; }
 
 	void show_exception(Error& e);
+	void showPopup(string message);
+	bool showOkCancelDialog(string message, string ok_text = "OK", string cancel_text = "CANCEL");
 
 	static void print_line(float x, float y, std::string t);
 	static void print(float x, float y, std::string t);

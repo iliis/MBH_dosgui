@@ -108,6 +108,15 @@ GuiManager::show_exception(Error& e)
 }
 ///////////////////////////////////////////////////////////////////////////////
 void
+GuiManager::showPopup(string message)
+{
+	MessageBox msg(SCREEN, message);
+	//msg.draw();
+
+	//Keyboard::get_key();
+}
+///////////////////////////////////////////////////////////////////////////////
+void
 GuiManager::print_line(float x, float y, string t)
 {
 	// basically just to cast a away a 'const' for _outgtext

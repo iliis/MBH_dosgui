@@ -12,6 +12,7 @@ public:
 	SelectableLabel(std::string text)
 		: Label(text) {};
 	virtual void draw();
+	virtual bool keyListener(Key k);
 };
 
 ///////////////////////////////////////////////////////////////////////////////

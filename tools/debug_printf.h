@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <graph.h> // for _outtext()
+#include <assert.h>
 ///////////////////////////////////////////////////////////////////////////////
 
 void debug_printf(const char * format, ...);

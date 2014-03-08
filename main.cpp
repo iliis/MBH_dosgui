@@ -51,9 +51,14 @@ int main() {
 		m->addEntry("hallo");
 		m->addEntry("welt");
 		m->addEntry("asdfasdfasdf asdfasdf");
+		m->addEntry("yet another one");
+		m->addEntry("this");
+		m->addEntry("or that");
+		m->addEntry("or not?");
+		m->addEntry("and the last one");
 
 		gui.getScreen().addWidget(m);
-		gui.setFocusTo(m->getEntries().back());
+		gui.setFocusTo(m->getEntries().front());
 
 		debug_printf("starting gui\n");
 		gui.run();

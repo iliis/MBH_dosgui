@@ -11,3 +11,14 @@ SelectableLabel::draw()
 	Label::draw();
 }
 ///////////////////////////////////////////////////////////////////////////////
+bool
+SelectableLabel::keyListener(Key k)
+{
+	if (k == Keyboard::KEY_ENTER) {
+		GuiManager::getInstance().showPopup("selected Entry: "+this->text);
+		return true;
+	}
+
+	return false;
+}
+///////////////////////////////////////////////////////////////////////////////
