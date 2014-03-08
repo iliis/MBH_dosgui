@@ -2,6 +2,7 @@
 #define __SELECTABLE_LABEL_H_INCLUDED__
 
 #include "label.h"
+#include "tools/debug_printf.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 

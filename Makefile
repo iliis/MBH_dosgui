@@ -16,7 +16,8 @@ HEADERS= \
 		 heater/temperature_controller.h \
 		 heater/printer.h \
 		 tools/errorclass.h \
-		 tools/stringhelpers.h
+		 tools/stringhelpers.h \
+		 tools/debug_printf.h
 
 SOURCES=$(HEADERS:.h=.cpp) main.cpp
 OBJECTS=$(SOURCES:.cpp=.o)

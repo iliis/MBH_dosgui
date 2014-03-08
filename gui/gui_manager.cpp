@@ -21,6 +21,7 @@ GuiManager::~GuiManager()
 	if (this->is_initialized) {
 
 		delete this->SCREEN;
+		this->focus = NULL;
 
 		_unregisterfonts();
 		_setvideomode(_DEFAULTMODE);
@@ -79,14 +80,13 @@ GuiManager::keyListener(Key k)
 	}
 
 	// handle key ourselfs
-	
 	if (k == Keyboard::KEY_LEFT  && focus->focus_next_left)  focus = focus->focus_next_left;
 	if (k == Keyboard::KEY_RIGHT && focus->focus_next_right) focus = focus->focus_next_right;
 	if (k == Keyboard::KEY_UP    && focus->focus_next_up)    focus = focus->focus_next_up;
 	if (k == Keyboard::KEY_DOWN  && focus->focus_next_down)  focus = focus->focus_next_down;
 
 	// if key == ESC: show quit dialog or something
-	if (k == Keyboard::KEY_ESCAPE)
+	if (k == Keyboard::KEY_ESCAPE || k.keycode == 'q')
 		this->stop();
 }
 ///////////////////////////////////////////////////////////////////////////////

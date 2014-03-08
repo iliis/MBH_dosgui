@@ -7,12 +7,12 @@ Menu::addEntry(string text)
 {
 	SelectableLabel* label = new SelectableLabel(text);
 
-	label->y = this->y.ref();
+	label->x = this->x.ref();
 
 	if (entries.empty()) {
 		label->focus_next_up   = label;
 		label->focus_next_down = label;
-		label->x = this->x.ref();
+		label->y = this->y.ref();
 		this->width  = label->width.ref();
 		this->height = label->height.ref();
 	} else {
@@ -25,9 +25,10 @@ Menu::addEntry(string text)
 		label->focus_next_up   = last;
 		label->focus_next_down = first;
 
-		//this->height = this->height.ref() + label->height.ref();
-		//this->width  = Expression<float>::ExpressionRefPtr(new Expression<float>::ExprMaxRef(width.ref(), label->width.ref()));
+		this->height += label->height.ref();
+		this->width.max(label->width.ref());
 		//this->width = MAX(this->width.ref(), label->width.ref());
+		label->y = last->y.ref() + label->height.ref();
 	}
 
 	entries.push_back(label);

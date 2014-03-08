@@ -5,7 +5,7 @@ void
 SelectableLabel::draw()
 {
 	if (GuiManager::getInstance().getFocus() == this) {
-		_rectangle(_GFILLINTERIOR, x, y, x+width, y+height);
+		_rectangle(_GBORDER, x, y, x+width, y+height);
 	} 
 
 	Label::draw();

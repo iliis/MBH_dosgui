@@ -6,6 +6,7 @@
 #include "window.h"
 #include "message_box.h"
 #include "keyboard.h"
+#include "tools/debug_printf.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 class GuiManager
@@ -46,7 +47,8 @@ public:
 	}
 
 private:
-	GuiManager() : focus(NULL), SCREEN(NULL), is_initialized(false), is_running(false) {};
+	// somehow, this constructor is called twice, even tough it is private!?
+	GuiManager() /* : focus(NULL), SCREEN(NULL), is_initialized(false), is_running(false) */ {};
 
 	GuiManager(const GuiManager&); // no copy-constructor
 	void operator=(const GuiManager&); // no assignment

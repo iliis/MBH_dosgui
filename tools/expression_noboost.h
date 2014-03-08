@@ -460,10 +460,23 @@ public:
 	ExpressionRef* divided_by(ExpressionRef* r)    {assert(r); return new ExprDivRef  (this->ref(), r);};
 	// TODO
 	//ExpressionRef* func (boost::function<Typ(Typ)> f){         return new ExprFuncRef (f, this->ref());};
+	
+	// TODO: this is probably buggy if 'this' isn't an expression but a value (e.g. this->expr == NULL)
+	Expression<Typ>& max(ExpressionRefPtr other)
+	{
+		assert(this->expr);
+		ExpressionRef* orig = this->expr;
+		this->expr = NULL;
+
+		this->link(new ExprMaxRef(orig, other));
+
+		return *this;
+	}
 
 
 	Expression<Typ>& operator+=(ExpressionRefPtr r)
 	{
+		assert(this->expr);
 		ExpressionRef* orig = this->expr;
 		this->expr = NULL;
 
