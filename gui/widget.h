@@ -18,7 +18,7 @@ public:
 
 
 	Widget() : focus_next_left(NULL), focus_next_right(NULL), focus_next_up(NULL), focus_next_down(NULL) {};
-	virtual ~Widget() {};
+	virtual ~Widget();
 	virtual void draw() = 0;
 
 	// implement functionality here, return if keypress was handled
