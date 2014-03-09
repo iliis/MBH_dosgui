@@ -6,11 +6,15 @@ using namespace std;
 void
 GuiManager::init()
 {
-	// SVGA (640x480, 256 colors)
-	_setvideomode(_VRES256COLOR);
+
+	_setvideomode(_MAXRESMODE); // 640x480, 16colors
 	_registerfonts("fonts/*.fon");
 
-	this->SCREEN = new Window(0, 0, 640, 480);
+
+	struct videoconfig conf;
+	_getvideoconfig(&conf);
+
+	this->SCREEN = new Window(0, 0, conf.numxpixels, conf.numypixels);
 	this->focus  = SCREEN;
 
 	this->is_initialized = true;
@@ -26,6 +30,56 @@ GuiManager::~GuiManager()
 		_unregisterfonts();
 		_setvideomode(_DEFAULTMODE);
 	}
+}
+///////////////////////////////////////////////////////////////////////////////
+void
+GuiManager::printVideoConfig()
+{
+	struct videoconfig conf;
+	_getvideoconfig(&conf);
+
+	_setcolor(4);
+	_rectangle(_GBORDER, 0,0,conf.numxpixels-1,conf.numypixels-1);
+
+	switch (conf.adapter)
+	{
+		case _VGA :
+			debug_printf("VGA\n"); break;
+		case _SVGA :
+			debug_printf("SVGA\n"); break;
+		case _MCGA :
+			debug_printf("MCGA\n"); break;
+		case _EGA :
+			debug_printf("EGA\n"); break;
+		case _CGA :
+			debug_printf("CGA\n"); break;
+		case _HERCULES :
+			debug_printf("Hercules\n"); break;
+		case _UNKNOWN:
+			debug_printf("unknown graphics adapter\n"); break;
+		default :
+			debug_printf("no graphics adapter\n"); break;
+	}
+
+	switch (conf.monitor)
+	{
+		case _MONO:
+			debug_printf("monitor: mono\n"); break;
+		case _COLOR:
+			debug_printf("monitor: color\n"); break;
+		case _ENHANCED:
+			debug_printf("monitor: enhanced\n"); break;
+		case _ANALOGMONO:
+			debug_printf("monitor: analog mono\n"); break;
+		case _ANALOGCOLOR:
+			debug_printf("monitor: analog color\n"); break;
+		default:
+			debug_printf("monitor: unknown\n"); break;
+	} 
+
+	debug_printf("memory: %d KB\n", conf.memory);
+
+	debug_printf("resolution: %d x %d (colors: %d)\n", conf.numxpixels, conf.numypixels, conf.numcolors);
 }
 ///////////////////////////////////////////////////////////////////////////////
 void

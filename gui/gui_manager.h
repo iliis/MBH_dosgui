@@ -41,6 +41,8 @@ public:
 
 	Window& getScreen() { assert(SCREEN); return *this->SCREEN; }
 
+	void printVideoConfig();
+
 	///////////////////////////////////////////////////////////////////////////
 	// SINGLETON
 	static GuiManager& getInstance() {
