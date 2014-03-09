@@ -24,6 +24,9 @@ string ToString(long long int x);
 string ToString(unsigned long long int x);
 string ToString(double x);
 ///////////////////////////////////////////////////////////////////////////////
+int ToInt(string s);
+float ToFloat(string s);
+///////////////////////////////////////////////////////////////////////////////
 string inline const operator+(string const& a, double b) {return a+ToString(b);};
 string inline const operator+(string const& a, float  b) {return a+ToString(b);};
 string inline const operator+(string const& a, int    b) {return a+ToString(b);};

@@ -22,7 +22,7 @@ public:
 	virtual void draw() = 0;
 
 	// implement functionality here, return if keypress was handled
-	virtual bool keyListener(Key k) {return false;}
+	virtual bool keyListener(Key k) {k=k; return false;}
 };
 
 #endif

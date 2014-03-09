@@ -124,9 +124,10 @@ void
 GuiManager::print_line(float x, float y, string t)
 {
 	// basically just to cast a away a 'const' for _outgtext
-	_moveto(x,y);
 	// char buf[500];
 	// strncpy(buf, t.c_str(), sizeof(buf));
+
+	_moveto(x,y);
 	_outgtext((char*)t.c_str());
 }
 ///////////////////////////////////////////////////////////////////////////////

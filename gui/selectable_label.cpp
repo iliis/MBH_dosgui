@@ -5,8 +5,10 @@ void
 SelectableLabel::draw()
 {
 	if (GuiManager::getInstance().getFocus() == this) {
-		_rectangle(_GBORDER, x, y, x+width, y+height);
-	} 
+		//_rectangle(_GBORDER, x, y, x+width, y+height);
+		_setcolor(4);
+	} else
+		_setcolor(COLOR_NORMAL);
 
 	Label::draw();
 }

@@ -7,6 +7,7 @@ HEADERS= \
 		 gui/window.h \
 		 gui/label.h \
 		 gui/selectable_label.h \
+		 gui/numeric_input.h \
 		 gui/menu.h \
 		 gui/message_box.h \
 		 gui/widget.h \

@@ -26,6 +26,7 @@ export LIB=/home/samuel/programme/watcom/lib286/dos:$LIB
 
 #include "gui/gui_manager.h"
 #include "gui/menu.h"
+#include "gui/numeric_input.h"
 #include "tools/debug_printf.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,18 +48,33 @@ int main() {
 		GuiManager& gui = GuiManager::getInstance();
 		gui.init();
 
-		Menu* m = new Menu();
-		m->addEntry("hallo");
-		m->addEntry("welt");
-		m->addEntry("asdfasdfasdf asdfasdf");
-		m->addEntry("yet another one");
-		m->addEntry("this");
-		m->addEntry("or that");
-		m->addEntry("or not?");
-		m->addEntry("and the last one");
+		Menu m;
+		m.addEntry("hallo");
+		m.addEntry("welt");
+		m.addEntry("asdfasdfasdf asdfasdf");
+		m.addEntry("yet another one");
+		m.addEntry("this");
+		m.addEntry("or that");
+		m.addEntry("or not?");
+		m.addEntry("and the last one");
 
-		gui.getScreen().addWidget(m);
-		gui.setFocusTo(m->getEntries().front());
+		NumericInput inp(4);
+		inp.y = m.y.ref() + m.height.ref();
+
+		gui.getScreen().addWidget(&m);
+		gui.getScreen().addWidget(&inp);
+		//gui.setFocusTo(m.getEntries().front());
+		gui.setFocusTo(&inp);
+
+
+		Label l("flub");
+		l.setInt(inp.value);
+		gui.getScreen().addWidget(&l);
+		l.x = 200;
+		l.y = 20;
+
+		inp.focus_next_up = m.getEntries().back();
+		inp.focus_next_down = m.getEntries().front();
 
 		debug_printf("starting gui\n");
 		gui.run();
