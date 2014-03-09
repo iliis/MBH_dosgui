@@ -11,6 +11,7 @@ SelectableLabel::draw()
 		_setcolor(COLOR_NORMAL);
 
 	Label::draw();
+	_setcolor(COLOR_NORMAL);
 }
 ///////////////////////////////////////////////////////////////////////////////
 bool
