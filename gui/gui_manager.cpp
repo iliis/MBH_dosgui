@@ -91,7 +91,9 @@ GuiManager::run()
 		while (this->is_running) {
 			try {
 				this->SCREEN->draw();
-				this->keyListener(Keyboard::get_key());
+
+				//if (kbhit())
+					this->keyListener(Keyboard::get_key());
 			}
 			catch (Error& e) {
 				// non-critical error, just show message and continue program

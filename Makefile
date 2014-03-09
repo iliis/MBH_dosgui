@@ -18,7 +18,8 @@ HEADERS= \
 		 heater/printer.h \
 		 tools/errorclass.h \
 		 tools/stringhelpers.h \
-		 tools/debug_printf.h
+		 tools/debug_printf.h \
+		 tools/serial.h
 
 SOURCES=$(HEADERS:.h=.cpp) main.cpp
 OBJECTS=$(SOURCES:.cpp=.o)

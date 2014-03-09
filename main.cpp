@@ -28,6 +28,7 @@ export LIB=/home/samuel/programme/watcom/lib286/dos:$LIB
 #include "gui/menu.h"
 #include "gui/numeric_input.h"
 #include "tools/debug_printf.h"
+#include "tools/serial.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 void draw_color_table() {
@@ -45,6 +46,22 @@ int main() {
 	open_logfile();
 
 	try {
+
+		debug_printf("number of com ports: %d\n", SerialPort::countPorts());
+		getchar();
+
+		SerialPort com1(1, 9600, NONE, 8, 1);
+
+		while (1) {
+			//com1.printStatus(com1.getStatus());
+			debug_printf("-------------\n");
+			com1.write(0x42);
+			debug_printf(".............\n");
+			char d = com1.waitForData();
+			if (d != 0)
+				debug_printf("read from UART: %X\n", d);
+		}
+
 		GuiManager& gui = GuiManager::getInstance();
 		gui.init();
 
