@@ -26,6 +26,8 @@ public:
 	Window(float x, float y, float w, float h)
 	   : rel_x(x), rel_y(y), width(w), height(h) {};
 
+	~Window();
+
 	float getAbsX() { if (parent) return parent->getAbsX() + rel_x; else return rel_x; }
 	float getAbsY() { if (parent) return parent->getAbsY() + rel_y; else return rel_y; }
 

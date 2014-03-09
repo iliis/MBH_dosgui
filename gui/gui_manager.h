@@ -22,7 +22,7 @@ public:
 
 	void init();
 	void run();
-	inline void stop() { this->is_running = false; }
+	inline void stop() { this->is_running = false; debug_printf("gui::stop() called\n"); }
 
 	void show_exception(Error& e);
 	void showPopup(string message);

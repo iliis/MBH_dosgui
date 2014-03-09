@@ -67,6 +67,8 @@ GuiManager::run()
 			}
 		} // end while
 
+		debug_printf("exiting main loop\n");
+
 		this->is_running = false;
 	}
 }
@@ -75,8 +77,10 @@ void
 GuiManager::keyListener(Key k)
 {
 	if (focus) {
-		if (focus->keyListener(k))
+		if (focus->keyListener(k)) {
+			//debug_printf("widget %p handled keycode %d\n", focus, k.keycode);
 			return; // Widget handled input
+		}
 	}
 
 	// handle key ourselfs
@@ -111,9 +115,9 @@ void
 GuiManager::showPopup(string message)
 {
 	MessageBox msg(SCREEN, message);
-	//msg.draw();
+	msg.draw();
 
-	//Keyboard::get_key();
+	Keyboard::get_key();
 }
 ///////////////////////////////////////////////////////////////////////////////
 void
